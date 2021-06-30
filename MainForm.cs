@@ -13,13 +13,16 @@ using TranslationTool.Model;
 
 namespace TranslationTool
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         string fileName;
-        string projectName;
         TagTranslation activeTag;
+        public TranslationProject project = new TranslationProject();
+
+        CreateProjectForm createForm = new CreateProjectForm();
+
         public List<TagTranslation> tags = new List<TagTranslation>();
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             fileDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -42,6 +45,7 @@ namespace TranslationTool
             tags = FileConnector.getEntries(fileName);
             fileDataGrid.DataSource = tags;
             updateProgress();
+            updateTreeView();
         }
 
         private void OnSelectedRow(object sender, EventArgs e)
@@ -64,6 +68,7 @@ namespace TranslationTool
             fileDataGrid.Rows[curRow].Selected = false;
             fileDataGrid.Rows[curRow+1].Selected = true;
             updateProgress();
+            updateTreeView();
         }
 
         private void saveProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -71,8 +76,6 @@ namespace TranslationTool
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Project file (*.translation)|*.translation";
             sfd.ShowDialog();
-
-            projectName = sfd.FileName;
             FileConnector.writeJsonFile(sfd.FileName, tags);
         }
 
@@ -81,10 +84,11 @@ namespace TranslationTool
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Project file (*.translation)|*.translation";
             ofd.ShowDialog();
-            projectName = ofd.FileName;
             tags = FileConnector.readJsonFile(ofd.FileName);
             fileDataGrid.DataSource = tags;
             updateProgress();
+            updateTreeView();
+
         }
 
         private void finishProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -92,7 +96,6 @@ namespace TranslationTool
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Property files (*.properties)|*.properties|All (*.*)|*.*";
             sfd.ShowDialog();
-
             FileConnector.createTranslation(sfd.FileName, tags);
         }
 
@@ -129,6 +132,38 @@ namespace TranslationTool
         {
             AboutForm about = new AboutForm();
             about.ShowDialog();
+        }
+
+        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            createForm.CreateNewProject(this);
+            updateTreeView();
+        }
+
+        private void addFileToProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Property files (*.properties)|*.properties|All (*.*)|*.*";
+            ofd.ShowDialog();
+            TranslationFile file = new TranslationFile();
+            file.Path = ofd.FileName;
+            file.Entries = FileConnector.getEntries(file.Path);
+            project.Files.Add(file);
+            updateTreeView();
+        }
+
+        private void updateTreeView()
+        {
+            projectTreeView.BeginUpdate();
+            projectTreeView.Nodes.Clear();
+            TreeNode projectNode = new TreeNode() { Text = project.Language, Tag = project };
+            foreach (TranslationFile file in project.Files)
+            {
+                TreeNode fileNode = new TreeNode() { Text = file.Path, Tag = file };
+                projectNode.Nodes.Add(fileNode);
+            }
+            projectTreeView.EndUpdate();
+            projectTreeView.Refresh();
         }
     }
 }
