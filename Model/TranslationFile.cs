@@ -8,10 +8,10 @@ namespace TranslationTool.Model
 {
     public class TranslationFile
     {
-        List<TagTranslation> entries = new List<TagTranslation>();
+        List<TranslationTag> entries = new List<TranslationTag>();
         string path;
 
-        public List<TagTranslation> Entries
+        public List<TranslationTag> Entries
         {
             get => entries;
             set => entries = value;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TranslationTool.Model
 {
-    public class TagTranslation
+    public class TranslationTag
     {
         int id;
         string tag;

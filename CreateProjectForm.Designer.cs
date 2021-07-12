@@ -34,6 +34,10 @@ namespace TranslationTool
             this.languageTextBox = new System.Windows.Forms.TextBox();
             this.languageCodeTextBox = new System.Windows.Forms.TextBox();
             this.createProjectButton = new System.Windows.Forms.Button();
+            this.authorTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.blurbTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -70,7 +74,7 @@ namespace TranslationTool
             // 
             // createProjectButton
             // 
-            this.createProjectButton.Location = new System.Drawing.Point(15, 58);
+            this.createProjectButton.Location = new System.Drawing.Point(12, 110);
             this.createProjectButton.Name = "createProjectButton";
             this.createProjectButton.Size = new System.Drawing.Size(186, 23);
             this.createProjectButton.TabIndex = 7;
@@ -78,11 +82,47 @@ namespace TranslationTool
             this.createProjectButton.UseVisualStyleBackColor = true;
             this.createProjectButton.Click += new System.EventHandler(this.createProjectButton_Click);
             // 
+            // authorTextBox
+            // 
+            this.authorTextBox.Location = new System.Drawing.Point(101, 58);
+            this.authorTextBox.Name = "authorTextBox";
+            this.authorTextBox.Size = new System.Drawing.Size(100, 20);
+            this.authorTextBox.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 61);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Author";
+            // 
+            // blurbTextBox
+            // 
+            this.blurbTextBox.Location = new System.Drawing.Point(101, 84);
+            this.blurbTextBox.Name = "blurbTextBox";
+            this.blurbTextBox.Size = new System.Drawing.Size(100, 20);
+            this.blurbTextBox.TabIndex = 10;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 87);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Blurb";
+            // 
             // CreateProjectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(214, 91);
+            this.ClientSize = new System.Drawing.Size(214, 142);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.blurbTextBox);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.authorTextBox);
             this.Controls.Add(this.createProjectButton);
             this.Controls.Add(this.languageCodeTextBox);
             this.Controls.Add(this.languageTextBox);
@@ -106,5 +146,9 @@ namespace TranslationTool
         private System.Windows.Forms.TextBox languageTextBox;
         private System.Windows.Forms.TextBox languageCodeTextBox;
         private System.Windows.Forms.Button createProjectButton;
+        private System.Windows.Forms.TextBox authorTextBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox blurbTextBox;
+        private System.Windows.Forms.Label label4;
     }
 }

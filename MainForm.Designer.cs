@@ -43,7 +43,6 @@ namespace TranslationTool
             this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.finishProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mergeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,9 +53,11 @@ namespace TranslationTool
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.projectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.addFileToProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectTreeView = new System.Windows.Forms.TreeView();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isEditedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagTranslationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileDataGrid)).BeginInit();
@@ -67,7 +68,7 @@ namespace TranslationTool
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(430, 27);
+            this.label1.Location = new System.Drawing.Point(5, 464);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 1;
@@ -76,7 +77,7 @@ namespace TranslationTool
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(427, 66);
+            this.label2.Location = new System.Drawing.Point(5, 490);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(28, 13);
             this.label2.TabIndex = 2;
@@ -84,7 +85,7 @@ namespace TranslationTool
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(433, 380);
+            this.saveButton.Location = new System.Drawing.Point(778, 487);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 63);
             this.saveButton.TabIndex = 3;
@@ -95,17 +96,17 @@ namespace TranslationTool
             // nameTextBox
             // 
             this.nameTextBox.Enabled = false;
-            this.nameTextBox.Location = new System.Drawing.Point(430, 43);
+            this.nameTextBox.Location = new System.Drawing.Point(46, 461);
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(423, 20);
             this.nameTextBox.TabIndex = 1;
             // 
             // textTextBox
             // 
-            this.textTextBox.Location = new System.Drawing.Point(433, 82);
+            this.textTextBox.Location = new System.Drawing.Point(46, 487);
             this.textTextBox.Multiline = true;
             this.textTextBox.Name = "textTextBox";
-            this.textTextBox.Size = new System.Drawing.Size(423, 292);
+            this.textTextBox.Size = new System.Drawing.Size(726, 63);
             this.textTextBox.TabIndex = 2;
             // 
             // progressBar
@@ -118,8 +119,7 @@ namespace TranslationTool
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.projectToolStripMenuItem1});
+            this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1072, 24);
@@ -130,7 +130,6 @@ namespace TranslationTool
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.projectToolStripMenuItem,
-            this.openFileToolStripMenuItem,
             this.mergeFileToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.quitToolStripMenuItem});
@@ -177,13 +176,6 @@ namespace TranslationTool
             this.finishProjectToolStripMenuItem.Text = "Finish Project";
             this.finishProjectToolStripMenuItem.Click += new System.EventHandler(this.finishProjectToolStripMenuItem_Click);
             // 
-            // openFileToolStripMenuItem
-            // 
-            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
-            this.openFileToolStripMenuItem.Text = "Open File";
-            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
-            // 
             // mergeFileToolStripMenuItem
             // 
             this.mergeFileToolStripMenuItem.Name = "mergeFileToolStripMenuItem";
@@ -209,11 +201,19 @@ namespace TranslationTool
             // 
             this.fileDataGrid.AllowUserToAddRows = false;
             this.fileDataGrid.AllowUserToDeleteRows = false;
+            this.fileDataGrid.AutoGenerateColumns = false;
+            this.fileDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.fileDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.fileDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idDataGridViewTextBoxColumn,
+            this.isEditedDataGridViewCheckBoxColumn,
+            this.tagDataGridViewTextBoxColumn,
+            this.textDataGridViewTextBoxColumn});
+            this.fileDataGrid.DataSource = this.tagTranslationBindingSource;
             this.fileDataGrid.Location = new System.Drawing.Point(12, 27);
             this.fileDataGrid.Name = "fileDataGrid";
             this.fileDataGrid.ReadOnly = true;
-            this.fileDataGrid.Size = new System.Drawing.Size(412, 416);
+            this.fileDataGrid.Size = new System.Drawing.Size(841, 416);
             this.fileDataGrid.TabIndex = 10;
             // 
             // progressCurrentLabel
@@ -233,7 +233,7 @@ namespace TranslationTool
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.progressCurrentLabel);
             this.groupBox1.Controls.Add(this.progressBar);
-            this.groupBox1.Location = new System.Drawing.Point(862, 380);
+            this.groupBox1.Location = new System.Drawing.Point(862, 487);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(198, 63);
             this.groupBox1.TabIndex = 12;
@@ -274,37 +274,54 @@ namespace TranslationTool
             this.label3.TabIndex = 12;
             this.label3.Text = "Current";
             // 
-            // projectToolStripMenuItem1
-            // 
-            this.projectToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addFileToProjectToolStripMenuItem});
-            this.projectToolStripMenuItem1.Name = "projectToolStripMenuItem1";
-            this.projectToolStripMenuItem1.Size = new System.Drawing.Size(56, 20);
-            this.projectToolStripMenuItem1.Text = "Project";
-            // 
-            // addFileToProjectToolStripMenuItem
-            // 
-            this.addFileToProjectToolStripMenuItem.Name = "addFileToProjectToolStripMenuItem";
-            this.addFileToProjectToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.addFileToProjectToolStripMenuItem.Text = "Add File to Project";
-            this.addFileToProjectToolStripMenuItem.Click += new System.EventHandler(this.addFileToProjectToolStripMenuItem_Click);
-            // 
             // projectTreeView
             // 
             this.projectTreeView.Location = new System.Drawing.Point(862, 27);
             this.projectTreeView.Name = "projectTreeView";
-            this.projectTreeView.Size = new System.Drawing.Size(198, 347);
+            this.projectTreeView.Size = new System.Drawing.Size(198, 416);
             this.projectTreeView.TabIndex = 13;
+            this.projectTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.projectTreeView_NodeMouseDoubleClick);
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.FillWeight = 10F;
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // isEditedDataGridViewCheckBoxColumn
+            // 
+            this.isEditedDataGridViewCheckBoxColumn.DataPropertyName = "IsEdited";
+            this.isEditedDataGridViewCheckBoxColumn.FillWeight = 15F;
+            this.isEditedDataGridViewCheckBoxColumn.HeaderText = "IsEdited";
+            this.isEditedDataGridViewCheckBoxColumn.Name = "isEditedDataGridViewCheckBoxColumn";
+            this.isEditedDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // tagDataGridViewTextBoxColumn
+            // 
+            this.tagDataGridViewTextBoxColumn.DataPropertyName = "Tag";
+            this.tagDataGridViewTextBoxColumn.FillWeight = 50F;
+            this.tagDataGridViewTextBoxColumn.HeaderText = "Tag";
+            this.tagDataGridViewTextBoxColumn.Name = "tagDataGridViewTextBoxColumn";
+            this.tagDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // textDataGridViewTextBoxColumn
+            // 
+            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
+            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
+            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
+            this.textDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // tagTranslationBindingSource
             // 
-            this.tagTranslationBindingSource.DataSource = typeof(TranslationTool.Model.TagTranslation);
+            this.tagTranslationBindingSource.DataSource = typeof(TranslationTool.Model.TranslationTag);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1072, 450);
+            this.ClientSize = new System.Drawing.Size(1072, 562);
             this.Controls.Add(this.projectTreeView);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.fileDataGrid);
@@ -338,7 +355,6 @@ namespace TranslationTool
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         private System.Windows.Forms.BindingSource tagTranslationBindingSource;
         private System.Windows.Forms.DataGridView fileDataGrid;
         private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
@@ -354,9 +370,11 @@ namespace TranslationTool
         private System.Windows.Forms.ToolStripMenuItem mergeFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem addFileToProjectToolStripMenuItem;
         private System.Windows.Forms.TreeView projectTreeView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isEditedDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
     }
 }
 

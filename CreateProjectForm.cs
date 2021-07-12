@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TranslationTool.Model;
 
 namespace TranslationTool
 {
@@ -26,9 +27,21 @@ namespace TranslationTool
 
         private void createProjectButton_Click(object sender, EventArgs e)
         {
-            mainForm.project.Language = languageTextBox.Text;
-            mainForm.project.LanguageCode = languageCodeTextBox.Text;
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowDialog();
+            TranslationProject _project = FileConnector.getTranslationProject(fbd.SelectedPath); ;
+            string modName = languageTextBox.Text + "Translation";
+            _project.Language = languageTextBox.Text;
+            _project.LanguageCode = languageCodeTextBox.Text;
+            _project.Mod = new ModFile()
+            {
+                author = authorTextBox.Text,
+                blurb = blurbTextBox.Text,
+                name = modName,
+                url = "https://wildermyth.com/wiki/index.php?title=" + modName
+            };
 
+            mainForm.project = _project;
             this.Hide();
         }
     }

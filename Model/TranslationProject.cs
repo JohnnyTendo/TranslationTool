@@ -8,14 +8,20 @@ namespace TranslationTool.Model
 {
     public class TranslationProject
     {
-        List<TranslationFile> files = new List<TranslationFile>();
+        List<TranslationDirectory> dirs = new List<TranslationDirectory>();
+        ModFile mod;
         string language;
         string languageCode;
 
-        public List<TranslationFile> Files
+        public List<TranslationDirectory> Dirs
         {
-            get => files;
-            set => files = value;
+            get => dirs;
+            set => dirs = value;
+        }
+        public ModFile Mod
+        {
+            get => mod;
+            set => mod = value;
         }
         public string Language
         {
