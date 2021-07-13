@@ -35,7 +35,7 @@ namespace TranslationTool
             this.saveButton = new System.Windows.Forms.Button();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.textTextBox = new System.Windows.Forms.TextBox();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.currentProgressBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,22 +47,22 @@ namespace TranslationTool
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileDataGrid = new System.Windows.Forms.DataGridView();
-            this.progressCurrentLabel = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.progressTotalLabel = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.projectTreeView = new System.Windows.Forms.TreeView();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.isEditedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagTranslationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.progressCurrentLabel = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.progressTotalLabel = new System.Windows.Forms.Label();
+            this.totalProgressBar = new System.Windows.Forms.ProgressBar();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.projectTreeView = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileDataGrid)).BeginInit();
-            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tagTranslationBindingSource)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -109,12 +109,12 @@ namespace TranslationTool
             this.textTextBox.Size = new System.Drawing.Size(726, 63);
             this.textTextBox.TabIndex = 2;
             // 
-            // progressBar
+            // currentProgressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(48, 19);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(129, 20);
-            this.progressBar.TabIndex = 6;
+            this.currentProgressBar.Location = new System.Drawing.Point(48, 19);
+            this.currentProgressBar.Name = "currentProgressBar";
+            this.currentProgressBar.Size = new System.Drawing.Size(129, 20);
+            this.currentProgressBar.TabIndex = 6;
             // 
             // menuStrip1
             // 
@@ -216,72 +216,6 @@ namespace TranslationTool
             this.fileDataGrid.Size = new System.Drawing.Size(841, 416);
             this.fileDataGrid.TabIndex = 10;
             // 
-            // progressCurrentLabel
-            // 
-            this.progressCurrentLabel.AutoSize = true;
-            this.progressCurrentLabel.Location = new System.Drawing.Point(93, 22);
-            this.progressCurrentLabel.Name = "progressCurrentLabel";
-            this.progressCurrentLabel.Size = new System.Drawing.Size(39, 13);
-            this.progressCurrentLabel.TabIndex = 11;
-            this.progressCurrentLabel.Text = "N.A. %";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.progressTotalLabel);
-            this.groupBox1.Controls.Add(this.progressBar1);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.progressCurrentLabel);
-            this.groupBox1.Controls.Add(this.progressBar);
-            this.groupBox1.Location = new System.Drawing.Point(862, 487);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(198, 63);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Progress";
-            // 
-            // progressTotalLabel
-            // 
-            this.progressTotalLabel.AutoSize = true;
-            this.progressTotalLabel.Location = new System.Drawing.Point(93, 44);
-            this.progressTotalLabel.Name = "progressTotalLabel";
-            this.progressTotalLabel.Size = new System.Drawing.Size(39, 13);
-            this.progressTotalLabel.TabIndex = 15;
-            this.progressTotalLabel.Text = "N.A. %";
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(48, 40);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(129, 20);
-            this.progressBar1.TabIndex = 14;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 44);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Total";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 23);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Current";
-            // 
-            // projectTreeView
-            // 
-            this.projectTreeView.Location = new System.Drawing.Point(862, 27);
-            this.projectTreeView.Name = "projectTreeView";
-            this.projectTreeView.Size = new System.Drawing.Size(198, 416);
-            this.projectTreeView.TabIndex = 13;
-            this.projectTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.projectTreeView_NodeMouseDoubleClick);
-            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -317,6 +251,72 @@ namespace TranslationTool
             // 
             this.tagTranslationBindingSource.DataSource = typeof(TranslationTool.Model.TranslationTag);
             // 
+            // progressCurrentLabel
+            // 
+            this.progressCurrentLabel.AutoSize = true;
+            this.progressCurrentLabel.Location = new System.Drawing.Point(93, 22);
+            this.progressCurrentLabel.Name = "progressCurrentLabel";
+            this.progressCurrentLabel.Size = new System.Drawing.Size(39, 13);
+            this.progressCurrentLabel.TabIndex = 11;
+            this.progressCurrentLabel.Text = "N.A. %";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.progressTotalLabel);
+            this.groupBox1.Controls.Add(this.totalProgressBar);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.progressCurrentLabel);
+            this.groupBox1.Controls.Add(this.currentProgressBar);
+            this.groupBox1.Location = new System.Drawing.Point(862, 487);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(198, 63);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Progress";
+            // 
+            // progressTotalLabel
+            // 
+            this.progressTotalLabel.AutoSize = true;
+            this.progressTotalLabel.Location = new System.Drawing.Point(93, 44);
+            this.progressTotalLabel.Name = "progressTotalLabel";
+            this.progressTotalLabel.Size = new System.Drawing.Size(39, 13);
+            this.progressTotalLabel.TabIndex = 15;
+            this.progressTotalLabel.Text = "N.A. %";
+            // 
+            // totalProgressBar
+            // 
+            this.totalProgressBar.Location = new System.Drawing.Point(48, 40);
+            this.totalProgressBar.Name = "totalProgressBar";
+            this.totalProgressBar.Size = new System.Drawing.Size(129, 20);
+            this.totalProgressBar.TabIndex = 14;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 44);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Total";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 23);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(41, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Current";
+            // 
+            // projectTreeView
+            // 
+            this.projectTreeView.Location = new System.Drawing.Point(862, 27);
+            this.projectTreeView.Name = "projectTreeView";
+            this.projectTreeView.Size = new System.Drawing.Size(198, 416);
+            this.projectTreeView.TabIndex = 13;
+            this.projectTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.projectTreeView_NodeMouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -337,9 +337,9 @@ namespace TranslationTool
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tagTranslationBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tagTranslationBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,7 +351,7 @@ namespace TranslationTool
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.TextBox textTextBox;
-        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.ProgressBar currentProgressBar;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
@@ -364,7 +364,7 @@ namespace TranslationTool
         private System.Windows.Forms.Label progressCurrentLabel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label progressTotalLabel;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar totalProgressBar;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripMenuItem mergeFileToolStripMenuItem;

@@ -63,22 +63,22 @@ namespace TranslationTool
             this.languageTextBox.Location = new System.Drawing.Point(101, 6);
             this.languageTextBox.Name = "languageTextBox";
             this.languageTextBox.Size = new System.Drawing.Size(100, 20);
-            this.languageTextBox.TabIndex = 2;
+            this.languageTextBox.TabIndex = 1;
             // 
             // languageCodeTextBox
             // 
             this.languageCodeTextBox.Location = new System.Drawing.Point(101, 32);
             this.languageCodeTextBox.Name = "languageCodeTextBox";
             this.languageCodeTextBox.Size = new System.Drawing.Size(100, 20);
-            this.languageCodeTextBox.TabIndex = 3;
+            this.languageCodeTextBox.TabIndex = 2;
             // 
             // createProjectButton
             // 
             this.createProjectButton.Location = new System.Drawing.Point(12, 110);
             this.createProjectButton.Name = "createProjectButton";
             this.createProjectButton.Size = new System.Drawing.Size(186, 23);
-            this.createProjectButton.TabIndex = 7;
-            this.createProjectButton.Text = "Create Project (TBA)";
+            this.createProjectButton.TabIndex = 5;
+            this.createProjectButton.Text = "Create Project";
             this.createProjectButton.UseVisualStyleBackColor = true;
             this.createProjectButton.Click += new System.EventHandler(this.createProjectButton_Click);
             // 
@@ -87,7 +87,7 @@ namespace TranslationTool
             this.authorTextBox.Location = new System.Drawing.Point(101, 58);
             this.authorTextBox.Name = "authorTextBox";
             this.authorTextBox.Size = new System.Drawing.Size(100, 20);
-            this.authorTextBox.TabIndex = 8;
+            this.authorTextBox.TabIndex = 3;
             // 
             // label3
             // 
@@ -103,7 +103,7 @@ namespace TranslationTool
             this.blurbTextBox.Location = new System.Drawing.Point(101, 84);
             this.blurbTextBox.Name = "blurbTextBox";
             this.blurbTextBox.Size = new System.Drawing.Size(100, 20);
-            this.blurbTextBox.TabIndex = 10;
+            this.blurbTextBox.TabIndex = 4;
             // 
             // label4
             // 
@@ -132,7 +132,6 @@ namespace TranslationTool
             this.MinimizeBox = false;
             this.Name = "CreateProjectForm";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Text = "New Project";
             this.ResumeLayout(false);
             this.PerformLayout();

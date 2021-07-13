@@ -12,11 +12,24 @@ namespace TranslationTool
 {
     public static class FileConnector
     {
+        //ToDo: implement a functionality to rename the TemplateDirectory from the path of the finalized project.
+        /* Is:
+         * e.g.: \\[SelectedModExportLocation]\\[TemplateDirectoryName]\\mod.json
+         * e.g.: \\[SelectedModExportLocation]\\[TemplateDirectoryName]\\[AllOtherSubDirectories]
+         * 
+         * Should:
+         * e.g.: \\[SelectedModExportLocation]\\[TranslationProject.Language]Translation\\mod.json
+         * e.g.: \\[SelectedModExportLocation]\\[TranslationProject.Language]Translation\\[AllOtherSubDirectories]
+         */
+
+
         #region These methods save/open the project files
 
         public static TranslationProject projectFromJson(string _fileName)
         {
             TranslationProject translationProject = new TranslationProject();
+            if (_fileName == null || _fileName == "")
+                return translationProject;
             using (StreamReader file = File.OpenText(_fileName))
             {
                 JsonSerializer serializer = new JsonSerializer();
@@ -118,12 +131,12 @@ namespace TranslationTool
             {
                 createDirectory(dir, _rootDir);
             }
-            writeModFile(_translationProject.Mod, _rootDir);
+            writeModFile(_translationProject.Mod, _rootDir + removeContextFromPath(_translationProject.Dirs[0].Path));
         }
 
         private static void createDirectory(TranslationDirectory _translationDirectory, string _context)
         {
-            string path = _context + _translationDirectory.Path;
+            string path = _context + removeContextFromPath(_translationDirectory.Path);
             Directory.CreateDirectory(path);
             foreach (TranslationDirectory dir in _translationDirectory.Dirs)
             {
@@ -137,7 +150,7 @@ namespace TranslationTool
 
         private static void createFile(TranslationFile _translationFile, string _context)
         {
-            string path = _context + _translationFile.Path;
+            string path = _context + removeContextFromPath(_translationFile.Path);
             using (StreamWriter writer = File.CreateText(path))
             {
                 foreach (TranslationTag tag in _translationFile.Entries)
@@ -153,17 +166,31 @@ namespace TranslationTool
         private static ModFile readModFile(string fileName)
         {
             ModFile modFile = new ModFile();
-            using (StreamReader file = File.OpenText(fileName + "\\mod.json"))
+            try
             {
-                JsonSerializer serializer = new JsonSerializer();
-                modFile = (ModFile)serializer.Deserialize(file, typeof(ModFile));
+                using (StreamReader file = File.OpenText(fileName + "\\mod.json"))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    modFile = (ModFile)serializer.Deserialize(file, typeof(ModFile));
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine("Creating 'mod.json' file...");
+
+                using (StreamWriter file = File.CreateText(fileName + "\\mod.json"))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, modFile);
+                }
             }
             return modFile;
         }
 
         private static void writeModFile(ModFile _modFile, string _rootDir)
         {
-            using (StreamWriter file = File.CreateText(_rootDir + "mods.json"))
+            string path = _rootDir + "\\mod.json";
+            using (StreamWriter file = File.CreateText(path))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, _modFile);
@@ -176,8 +203,19 @@ namespace TranslationTool
 
         private static string trimPath(string _path)
         {
+            string ret = "";
             string[] parts = _path.Split('\\');
-            return parts[parts.Length-1];
+            for (int i = 1; i < parts.Length; i++)
+            {
+                ret += '\\' + parts[i];
+            }
+            return ret;
+        }
+
+        private static string removeContextFromPath(string _path)
+        {
+            string[] parts = _path.Split('\\');
+            return '\\' + parts[parts.Length-1];
         }
 
         #endregion

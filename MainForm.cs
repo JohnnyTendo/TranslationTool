@@ -1,13 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TranslationTool.Model;
 
@@ -15,10 +7,12 @@ namespace TranslationTool
 {
     public partial class MainForm : Form
     {
-        string fileName;
+        //string fileName;
         TranslationTag activeTag;
-        public TranslationProject project = new TranslationProject();
+        List<TranslationTag> index = new List<TranslationTag>();
         CreateProjectForm createForm = new CreateProjectForm();
+
+        public TranslationProject project = new TranslationProject();
 
         public List<TranslationTag> tags = new List<TranslationTag>();
         public MainForm()
@@ -74,37 +68,45 @@ namespace TranslationTool
             updateProgress();
             updateTreeView();
         }
-        /*ToDo:
-         * Move this part to a function, triggered when a file gets selected in the right box
-         * 
-            fileDataGrid.DataSource = tags;
-            updateProgress();
-            updateTreeView();
-         *
-         */
 
         private void finishProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.ShowDialog();
+            if (fbd.SelectedPath == null || fbd.SelectedPath == "")
+                return;
             FileConnector.createProject(project, fbd.SelectedPath);
         }
 
         private void updateProgress()
         {
-            progressBar.Maximum = tags.Count;
-            progressBar.Value = tags.FindAll(t => t.IsEdited == true).Count;
-            progressBar.Update();
-            int percent = (int)(((double)progressBar.Value / (double)progressBar.Maximum) * 100);
-            progressCurrentLabel.Text = percent + "%";
-            progressBar.Refresh();
+            createIndex();
+
+            totalProgressBar.Maximum = index.Count;
+            totalProgressBar.Value = index.FindAll(t => t.IsEdited == true).Count;
+            totalProgressBar.Update();
+            int percentTotal = (int)(((double)totalProgressBar.Value / (double)totalProgressBar.Maximum) * 100);
+            if (percentTotal > 0)
+            {
+                progressTotalLabel.Text = percentTotal + "%";
+                totalProgressBar.Refresh();
+            }
+
+            currentProgressBar.Maximum = tags.Count;
+            currentProgressBar.Value = tags.FindAll(t => t.IsEdited == true).Count;
+            currentProgressBar.Update();
+            int percentCurrent = (int)(((double)currentProgressBar.Value / (double)currentProgressBar.Maximum) * 100);
+            if (percentCurrent > 0)
+            {
+                progressCurrentLabel.Text = percentCurrent + "%";
+                currentProgressBar.Refresh();
+            }
         }
 
         private void mergeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             throw new NotImplementedException();
-
             /*
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Project file (*.translation)|*.translation| All (*.*)|*.*";
@@ -138,7 +140,6 @@ namespace TranslationTool
 
         private void updateTreeView()
         {
-            // TODO: Rework to refresh properly
             projectTreeView.BeginUpdate();
             projectTreeView.Nodes.Clear();
             TreeNode projectNode = new TreeNode() { Text = project.Language, Tag = project };
@@ -154,7 +155,7 @@ namespace TranslationTool
 
         private TreeNode readTranslationDirectory(TranslationDirectory _translationDirectory)
         {
-            TreeNode node = new TreeNode() { Text = _translationDirectory.Path, Tag = _translationDirectory.Path };
+            TreeNode node = new TreeNode() { Text = trimPath(_translationDirectory.Path), Tag = _translationDirectory.Path };
             foreach (TranslationDirectory subDir in _translationDirectory.Dirs)
             {
                 node.Nodes.Add(readTranslationDirectory(subDir));
@@ -168,7 +169,7 @@ namespace TranslationTool
         }
         private TreeNode readTranslationFile(TranslationFile _translationFile)
         {
-            TreeNode node = new TreeNode() { Text = _translationFile.Path, Tag = _translationFile.Path };
+            TreeNode node = new TreeNode() { Text = trimPath(_translationFile.Path), Tag = _translationFile.Path };
             return node;
         }
 
@@ -185,6 +186,7 @@ namespace TranslationTool
                     {
                         tags = files[0].Entries;
                         fileDataGrid.DataSource = tags;
+                        updateTreeView();
                         updateProgress();
                         return;
                     }
@@ -193,12 +195,14 @@ namespace TranslationTool
                     {
                         tags = files[0].Entries;
                         fileDataGrid.DataSource = tags;
+                        updateTreeView();
                         updateProgress();
                         return;
                     }
                 }
             }
             fileDataGrid.DataSource = tags;
+            updateTreeView();
             updateProgress();
         }
 
@@ -220,6 +224,36 @@ namespace TranslationTool
             }
 
             return files;
+        }
+
+        private void createIndex()
+        {
+            foreach (TranslationDirectory dir in project.Dirs)
+            {
+                index.AddRange(readFileForIndex(dir));
+            }
+        }
+
+        private List<TranslationTag> readFileForIndex(TranslationDirectory _translationDirectory)
+        {
+            List<TranslationTag> tags = new List<TranslationTag>();
+
+            foreach (TranslationDirectory dir in _translationDirectory.Dirs)
+            {
+                tags.AddRange(readFileForIndex(dir));
+            }
+            foreach (TranslationFile file in _translationDirectory.Files)
+            {
+                tags.AddRange(file.Entries);
+            }
+
+            return tags;
+        }
+
+        private static string trimPath(string _path)
+        {
+            string[] parts = _path.Split('\\');
+            return parts[parts.Length - 1];
         }
     }
 }
