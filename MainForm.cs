@@ -23,6 +23,8 @@ namespace TranslationTool
             fileDataGrid.DataSource = tags;
         }
 
+
+        //ToDo: Move the not form bound operations to ProjectOperations.cs
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
