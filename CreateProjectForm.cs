@@ -8,15 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TranslationTool.Model;
+using TranslationTool.ViewModel;
 
 namespace TranslationTool
 {
     public partial class CreateProjectForm : Form
     {
         MainForm mainForm;
+        TranslationViewModel ViewModel;
         public CreateProjectForm()
         {
             InitializeComponent();
+            ViewModel = TranslationViewModel.Instance;
         }
 
         public void CreateNewProject(MainForm main)
@@ -29,11 +32,11 @@ namespace TranslationTool
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.ShowDialog();
-            TranslationProject _project = FileConnector.getTranslationProject(fbd.SelectedPath); ;
+            FileConnector.getTranslationProject(fbd.SelectedPath);
             string modName = languageTextBox.Text + "Translation";
-            _project.Language = languageTextBox.Text;
-            _project.LanguageCode = languageCodeTextBox.Text;
-            _project.Mod = new ModFile()
+            ViewModel.project.Language = languageTextBox.Text;
+            ViewModel.project.LanguageCode = languageCodeTextBox.Text;
+            ViewModel.project.Mod = new ModFile()
             {
                 author = authorTextBox.Text,
                 blurb = blurbTextBox.Text,
@@ -41,7 +44,6 @@ namespace TranslationTool
                 url = "https://wildermyth.com/wiki/index.php?title=" + modName
             };
 
-            mainForm.project = _project;
             this.Hide();
         }
     }

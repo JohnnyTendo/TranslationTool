@@ -2,29 +2,24 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using TranslationTool.Model;
+using TranslationTool.ViewModel;
 
 namespace TranslationTool
 {
     public partial class MainForm : Form
     {
-        //string fileName;
-        TranslationTag activeTag;
-        List<TranslationTag> index = new List<TranslationTag>();
         CreateProjectForm createForm = new CreateProjectForm();
-
-        public TranslationProject project = new TranslationProject();
-
-        public List<TranslationTag> tags = new List<TranslationTag>();
+        TranslationViewModel ViewModel;
         public MainForm()
         {
             InitializeComponent();
+            ViewModel = TranslationViewModel.Instance;
             fileDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             fileDataGrid.SelectionChanged += new EventHandler(OnSelectedRow);
-            fileDataGrid.DataSource = tags;
+            fileDataGrid.DataSource = ViewModel.tags;
         }
 
-
-        //ToDo: Move the not form bound operations to ProjectOperations.cs
+        #region FormControl methods
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -36,21 +31,20 @@ namespace TranslationTool
             {
                 return;
             }
-            activeTag = ((TranslationTag)fileDataGrid.SelectedRows[0].DataBoundItem);
-            nameTextBox.Text = activeTag.Tag;
-            textTextBox.Text = activeTag.Text;
+            ViewModel.activeTag = ((TranslationTag)fileDataGrid.SelectedRows[0].DataBoundItem);
+            nameTextBox.Text = ViewModel.activeTag.Tag;
+            textTextBox.Text = ViewModel.activeTag.Text;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            TranslationTag tag = tags.Find(t => t.Id == activeTag.Id);
+            TranslationTag tag = ViewModel.tags.Find(t => t.Id == ViewModel.activeTag.Id);
             tag.Text = textTextBox.Text;
             tag.IsEdited = true;
             int curRow = fileDataGrid.SelectedRows[0].Index;
             fileDataGrid.Rows[curRow].Selected = false;
             fileDataGrid.Rows[curRow+1].Selected = true;
             updateProgress();
-            updateTreeView();
         }
 
         private void saveProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -58,7 +52,7 @@ namespace TranslationTool
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Project file (*.translation)|*.translation";
             sfd.ShowDialog();
-            FileConnector.projectToJson(sfd.FileName, project);
+            FileConnector.projectToJson(sfd.FileName);
         }
 
         private void openProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -66,7 +60,7 @@ namespace TranslationTool
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Project file (*.translation)|*.translation";
             ofd.ShowDialog();
-            project = FileConnector.projectFromJson(ofd.FileName);
+            FileConnector.projectFromJson(ofd.FileName);
             updateProgress();
             updateTreeView();
         }
@@ -77,55 +71,17 @@ namespace TranslationTool
             fbd.ShowDialog();
             if (fbd.SelectedPath == null || fbd.SelectedPath == "")
                 return;
-            FileConnector.createProject(project, fbd.SelectedPath);
-        }
-
-        private void updateProgress()
-        {
-            createIndex();
-
-            totalProgressBar.Maximum = index.Count;
-            totalProgressBar.Value = index.FindAll(t => t.IsEdited == true).Count;
-            totalProgressBar.Update();
-            int percentTotal = (int)(((double)totalProgressBar.Value / (double)totalProgressBar.Maximum) * 100);
-            if (percentTotal > 0)
-            {
-                progressTotalLabel.Text = percentTotal + "%";
-                totalProgressBar.Refresh();
-            }
-
-            currentProgressBar.Maximum = tags.Count;
-            currentProgressBar.Value = tags.FindAll(t => t.IsEdited == true).Count;
-            currentProgressBar.Update();
-            int percentCurrent = (int)(((double)currentProgressBar.Value / (double)currentProgressBar.Maximum) * 100);
-            if (percentCurrent > 0)
-            {
-                progressCurrentLabel.Text = percentCurrent + "%";
-                currentProgressBar.Refresh();
-            }
+            FileConnector.createProject(fbd.SelectedPath);
         }
 
         private void mergeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            throw new NotImplementedException();
-            /*
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Project file (*.translation)|*.translation| All (*.*)|*.*";
             ofd.ShowDialog();
-            List<TranslationTag> importedTags = FileConnector.readJsonFile(ofd.FileName);
-            foreach (TranslationTag importedTag in importedTags.FindAll(t => t.IsEdited == true))
-            {
-                TranslationTag tag = tags.Find(t => t.Tag == importedTag.Tag && t.IsEdited == false);
-                if (tag != null)
-                {
-                    tag.Text = importedTag.Text;
-                    tag.IsEdited = true;
-                }
-            }
-            fileDataGrid.DataSource = tags;
+            FileConnector.mergeJsonFile(ofd.FileName);
+            updateTreeView();
             updateProgress();
-            */
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -140,19 +96,96 @@ namespace TranslationTool
             updateTreeView();
         }
 
+        private void projectTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            string tag = e.Node.Tag.ToString();
+            List<TranslationFile> files = new List<TranslationFile>();
+            if (tag.EndsWith(".properties"))
+            {
+                foreach (TranslationDirectory dir in ViewModel.project.Dirs)
+                {
+                    files = (List<TranslationFile>)dir.Files.FindAll(f => f.Path == tag);
+                    if (files.Count > 0)
+                    {
+                        ViewModel.tags = files[0].Entries;
+                        fileDataGrid.DataSource = ViewModel.tags;
+                        updateProgress();
+                        return;
+                    }
+                    files = searchTranslationDir(dir, tag);
+                    if (files.Count > 0)
+                    {
+                        ViewModel.tags = files[0].Entries;
+                        fileDataGrid.DataSource = ViewModel.tags;
+                        updateProgress();
+                        return;
+                    }
+                }
+            }
+            fileDataGrid.DataSource = ViewModel.tags;
+            updateTreeView();
+            updateProgress();
+        }
+
+        #endregion
+
+        #region FormControl helper methods
         private void updateTreeView()
         {
             projectTreeView.BeginUpdate();
             projectTreeView.Nodes.Clear();
-            TreeNode projectNode = new TreeNode() { Text = project.Language, Tag = project };
-            foreach (TranslationDirectory dir in project.Dirs)
+            TreeNode projectNode = new TreeNode() 
+            { 
+                Text = ViewModel.project.Language, 
+                Tag = ViewModel.project 
+            };
+            foreach (TranslationDirectory dir in ViewModel.project.Dirs)
             {
-                projectNode.Nodes.Add(readTranslationDirectory(dir));
+                TreeNode node = readTranslationDirectory(dir);
+                projectNode.Nodes.Add(node);
             }
             projectTreeView.Nodes.Add(projectNode);
             projectTreeView.EndUpdate();
             projectTreeView.Refresh();
             this.Refresh();
+        }
+
+        private void updateProgress()
+        {
+            createIndex();
+
+            totalProgressBar.Maximum = ViewModel.index.Count;
+            totalProgressBar.Value = ViewModel.index.FindAll(t => t.IsEdited == true).Count;
+            totalProgressBar.Update();
+            int totalPercent = (int)(((double)totalProgressBar.Value / (double)totalProgressBar.Maximum) * 100);
+            if (totalPercent >= 0)
+            {
+                progressTotalLabel.Text = totalPercent + "%";
+                totalProgressBar.Refresh();
+            }
+
+            currentProgressBar.Maximum = ViewModel.tags.Count;
+            currentProgressBar.Value = ViewModel.tags.FindAll(t => t.IsEdited == true).Count;
+            currentProgressBar.Update();
+            int currentPercent = (int)(((double)currentProgressBar.Value / (double)currentProgressBar.Maximum) * 100);
+            if (currentPercent >= 0)
+            {
+                progressCurrentLabel.Text = currentPercent + "%";
+                currentProgressBar.Refresh();
+            }
+        }
+
+        private void updateProgressBar(ProgressBar _progressBar, Label _progressBarLabel, List<TranslationTag> _payLoad)
+        {
+            _progressBar.Maximum = _payLoad.Count;
+            _progressBar.Value = _payLoad.FindAll(t => t.IsEdited == true).Count;
+            _progressBar.Update();
+            int percent = (int)(((double)_progressBar.Value / (double)_progressBar.Maximum) * 100);
+            if (percent > 0)
+            {
+                _progressBarLabel.Text = percent + "%";
+                _progressBar.Refresh();
+            }
         }
 
         private TreeNode readTranslationDirectory(TranslationDirectory _translationDirectory)
@@ -169,43 +202,38 @@ namespace TranslationTool
 
             return node;
         }
+
         private TreeNode readTranslationFile(TranslationFile _translationFile)
         {
             TreeNode node = new TreeNode() { Text = trimPath(_translationFile.Path), Tag = _translationFile.Path };
             return node;
         }
 
-        private void projectTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        #endregion
+
+        #region Helper methods
+        private void createIndex()
         {
-            string tag = e.Node.Tag.ToString();
-            List<TranslationFile> files = new List<TranslationFile>();
-            if (tag.EndsWith(".properties"))
+            foreach (TranslationDirectory dir in ViewModel.project.Dirs)
             {
-                foreach (TranslationDirectory dir in project.Dirs)
-                {
-                    files = (List<TranslationFile>)dir.Files.FindAll(f => f.Path == tag);
-                    if (files.Count > 0)
-                    {
-                        tags = files[0].Entries;
-                        fileDataGrid.DataSource = tags;
-                        updateTreeView();
-                        updateProgress();
-                        return;
-                    }
-                    files = searchTranslationDir(dir, tag);
-                    if (files.Count > 0)
-                    {
-                        tags = files[0].Entries;
-                        fileDataGrid.DataSource = tags;
-                        updateTreeView();
-                        updateProgress();
-                        return;
-                    }
-                }
+                ViewModel.index.AddRange(readFileForIndex(dir));
             }
-            fileDataGrid.DataSource = tags;
-            updateTreeView();
-            updateProgress();
+        }
+
+        private List<TranslationTag> readFileForIndex(TranslationDirectory _translationDirectory)
+        {
+            List<TranslationTag> tags = new List<TranslationTag>();
+
+            foreach (TranslationDirectory dir in _translationDirectory.Dirs)
+            {
+                tags.AddRange(readFileForIndex(dir));
+            }
+            foreach (TranslationFile file in _translationDirectory.Files)
+            {
+                tags.AddRange(file.Entries);
+            }
+
+            return tags;
         }
 
         private List<TranslationFile> searchTranslationDir(TranslationDirectory _translationDirectory, string _tag)
@@ -228,34 +256,13 @@ namespace TranslationTool
             return files;
         }
 
-        private void createIndex()
-        {
-            foreach (TranslationDirectory dir in project.Dirs)
-            {
-                index.AddRange(readFileForIndex(dir));
-            }
-        }
-
-        private List<TranslationTag> readFileForIndex(TranslationDirectory _translationDirectory)
-        {
-            List<TranslationTag> tags = new List<TranslationTag>();
-
-            foreach (TranslationDirectory dir in _translationDirectory.Dirs)
-            {
-                tags.AddRange(readFileForIndex(dir));
-            }
-            foreach (TranslationFile file in _translationDirectory.Files)
-            {
-                tags.AddRange(file.Entries);
-            }
-
-            return tags;
-        }
-
         private static string trimPath(string _path)
         {
             string[] parts = _path.Split('\\');
             return parts[parts.Length - 1];
         }
+
+        #endregion
+
     }
 }

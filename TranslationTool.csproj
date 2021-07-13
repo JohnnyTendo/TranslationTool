@@ -103,8 +103,8 @@
     <Compile Include="Model\TranslationFile.cs" />
     <Compile Include="Model\TranslationProject.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\TranslationViewModel.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
