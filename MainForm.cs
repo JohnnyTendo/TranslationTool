@@ -9,6 +9,7 @@ namespace TranslationTool
     public partial class MainForm : Form
     {
         CreateProjectForm createForm = new CreateProjectForm();
+        HelpForm helpForm = new HelpForm();
         TranslationViewModel ViewModel;
         public MainForm()
         {
@@ -125,6 +126,11 @@ namespace TranslationTool
             fileDataGrid.DataSource = ViewModel.tags;
             updateTreeView();
             updateProgress();
+        }
+
+        private void howToToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            helpForm.ShowDialog();
         }
 
         #endregion

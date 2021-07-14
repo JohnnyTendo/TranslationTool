@@ -47,6 +47,11 @@ namespace TranslationTool
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileDataGrid = new System.Windows.Forms.DataGridView();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isEditedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagTranslationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.progressCurrentLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.progressTotalLabel = new System.Windows.Forms.Label();
@@ -54,15 +59,11 @@ namespace TranslationTool
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.projectTreeView = new System.Windows.Forms.TreeView();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isEditedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagTranslationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.howToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileDataGrid)).BeginInit();
-            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tagTranslationBindingSource)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -137,6 +138,7 @@ namespace TranslationTool
             this.projectToolStripMenuItem,
             this.mergeFileToolStripMenuItem,
             this.aboutToolStripMenuItem,
+            this.howToToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
@@ -150,7 +152,7 @@ namespace TranslationTool
             this.saveProjectToolStripMenuItem,
             this.finishProjectToolStripMenuItem});
             this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
-            this.projectToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.projectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.projectToolStripMenuItem.Text = "Project...";
             // 
             // newProjectToolStripMenuItem
@@ -184,21 +186,21 @@ namespace TranslationTool
             // mergeFileToolStripMenuItem
             // 
             this.mergeFileToolStripMenuItem.Name = "mergeFileToolStripMenuItem";
-            this.mergeFileToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.mergeFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mergeFileToolStripMenuItem.Text = "Merge File";
             this.mergeFileToolStripMenuItem.Click += new System.EventHandler(this.mergeFileToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
@@ -222,6 +224,41 @@ namespace TranslationTool
             this.fileDataGrid.ReadOnly = true;
             this.fileDataGrid.Size = new System.Drawing.Size(820, 416);
             this.fileDataGrid.TabIndex = 10;
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.FillWeight = 10F;
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // isEditedDataGridViewCheckBoxColumn
+            // 
+            this.isEditedDataGridViewCheckBoxColumn.DataPropertyName = "IsEdited";
+            this.isEditedDataGridViewCheckBoxColumn.FillWeight = 15F;
+            this.isEditedDataGridViewCheckBoxColumn.HeaderText = "IsEdited";
+            this.isEditedDataGridViewCheckBoxColumn.Name = "isEditedDataGridViewCheckBoxColumn";
+            this.isEditedDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // tagDataGridViewTextBoxColumn
+            // 
+            this.tagDataGridViewTextBoxColumn.DataPropertyName = "Tag";
+            this.tagDataGridViewTextBoxColumn.FillWeight = 50F;
+            this.tagDataGridViewTextBoxColumn.HeaderText = "Tag";
+            this.tagDataGridViewTextBoxColumn.Name = "tagDataGridViewTextBoxColumn";
+            this.tagDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // textDataGridViewTextBoxColumn
+            // 
+            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
+            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
+            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
+            this.textDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // tagTranslationBindingSource
+            // 
+            this.tagTranslationBindingSource.DataSource = typeof(TranslationTool.Model.TranslationTag);
             // 
             // progressCurrentLabel
             // 
@@ -292,40 +329,12 @@ namespace TranslationTool
             this.projectTreeView.TabIndex = 13;
             this.projectTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.projectTreeView_NodeMouseDoubleClick);
             // 
-            // idDataGridViewTextBoxColumn
+            // howToToolStripMenuItem
             // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.FillWeight = 10F;
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // isEditedDataGridViewCheckBoxColumn
-            // 
-            this.isEditedDataGridViewCheckBoxColumn.DataPropertyName = "IsEdited";
-            this.isEditedDataGridViewCheckBoxColumn.FillWeight = 15F;
-            this.isEditedDataGridViewCheckBoxColumn.HeaderText = "IsEdited";
-            this.isEditedDataGridViewCheckBoxColumn.Name = "isEditedDataGridViewCheckBoxColumn";
-            this.isEditedDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // tagDataGridViewTextBoxColumn
-            // 
-            this.tagDataGridViewTextBoxColumn.DataPropertyName = "Tag";
-            this.tagDataGridViewTextBoxColumn.FillWeight = 50F;
-            this.tagDataGridViewTextBoxColumn.HeaderText = "Tag";
-            this.tagDataGridViewTextBoxColumn.Name = "tagDataGridViewTextBoxColumn";
-            this.tagDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // textDataGridViewTextBoxColumn
-            // 
-            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
-            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
-            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
-            this.textDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // tagTranslationBindingSource
-            // 
-            this.tagTranslationBindingSource.DataSource = typeof(TranslationTool.Model.TranslationTag);
+            this.howToToolStripMenuItem.Name = "howToToolStripMenuItem";
+            this.howToToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.howToToolStripMenuItem.Text = "How To";
+            this.howToToolStripMenuItem.Click += new System.EventHandler(this.howToToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -347,9 +356,9 @@ namespace TranslationTool
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tagTranslationBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tagTranslationBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -385,6 +394,7 @@ namespace TranslationTool
         private System.Windows.Forms.DataGridViewCheckBoxColumn isEditedDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ToolStripMenuItem howToToolStripMenuItem;
     }
 }
 
