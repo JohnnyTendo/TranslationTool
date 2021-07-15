@@ -90,7 +90,7 @@ namespace TranslationTool
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(28, 13);
             this.label6.TabIndex = 5;
-            this.label6.Text = "v0.6";
+            this.label6.Text = "v0.7";
             // 
             // AboutForm
             // 

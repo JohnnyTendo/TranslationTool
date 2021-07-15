@@ -24,6 +24,8 @@ namespace TranslationTool
             radioButtons.Add(radioButton4);
             radioButtons.Add(radioButton5);
             radioButtons.Add(radioButton6);
+            radioButtons.Add(radioButton7);
+            radioButtons.Add(radioButton8);
             titleLabel.Text = HelpTexts.helpPages[0].title;
             textLabel.Text = HelpTexts.helpPages[0].text;
         }
@@ -85,6 +87,5 @@ namespace TranslationTool
                 previousButton.Enabled = false;
             }
         }
-
     }
 }
