@@ -1,4 +1,6 @@
 # TranslationTool
-A Translation tool for Wildermyth.
+A small translation tool for Wildermyth.
+For now, I will only offer you an uncompiled version of this tool.
 
-Notice this is NOT an official work of Worldwalker Games LLC.
+## Notice
+- This is NOT an official work of Worldwalker Games LLC.
