@@ -258,6 +258,8 @@ namespace TranslationTool
         private static void createFile(TranslationFile _translationFile, string _context)
         {
             string path = _context + removeContextFromPath(_translationFile.Path);
+            string languageInsert = "_" + TranslationViewModel.Instance.project.LanguageCode;
+            path = path.Insert(path.LastIndexOf('.'), languageInsert);
             using (StreamWriter writer = File.CreateText(path))
             {
                 foreach (TranslationTag tag in _translationFile.Entries)
