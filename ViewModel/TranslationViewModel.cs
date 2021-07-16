@@ -7,12 +7,14 @@ using TranslationTool.Model;
 
 namespace TranslationTool.ViewModel
 {
-    public class TranslationViewModel
+    public sealed class TranslationViewModel
     {
         #region SingletonPattern
 
-        private static TranslationViewModel instance = new TranslationViewModel();
-
+        private static readonly TranslationViewModel instance = new TranslationViewModel();
+        static TranslationViewModel()
+        {
+        }
         public static TranslationViewModel Instance
         {
             get

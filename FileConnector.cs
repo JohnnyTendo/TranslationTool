@@ -145,31 +145,30 @@ namespace TranslationTool
         public static void getTranslationProject(string _path)
         {
             TranslationProject translationProject = new TranslationProject();
-            translationProject.Dirs.Add(getTranslationDir(_path, true));
-            translationProject.Mod = readModFile(_path);
+            string context = _path.Remove(_path.LastIndexOf("\\"));
+            _path = _path.Remove(0, _path.LastIndexOf("\\"));
+            translationProject.Dirs.Add(getTranslationDir(context, _path, true));
+            translationProject.Mod = readModFile(context + _path);
             TranslationViewModel.Instance.project = translationProject;
         }
 
-        private static TranslationDirectory getTranslationDir(string _path, bool _firstRun = false)
+        private static TranslationDirectory getTranslationDir(string _context, string _path, bool _firstRun = false)
         {
+            // Rework this. This will cause the merge process to compare the creation context e.g. user folder as well.
+            // Better create a complete context string and subtract it from the path
+
             TranslationDirectory translationDirectory;
             if (_firstRun)
             {
-                string[] parts = _path.Split('\\');
-                string modifiedPath = "";
-                for (int i = 0; i < parts.Length - 1; i++)
-                {
-                    modifiedPath += parts[i] + '\\';
-                }
-                modifiedPath += "Translation";
-                translationDirectory = new TranslationDirectory() { Path = trimPath(modifiedPath) };
+                translationDirectory = new TranslationDirectory() { Path = "Translation" };
+                _path = "\\" + _path;
             }
             else
             {
-                translationDirectory = new TranslationDirectory() { Path = trimPath(_path) };
+                translationDirectory = new TranslationDirectory() { Path = _path };
             }
 
-            DirectoryInfo rootDir = new DirectoryInfo(_path);
+            DirectoryInfo rootDir = new DirectoryInfo(_context + _path);
 
             //Iterate through every file in directory
             foreach (FileInfo file in rootDir.GetFiles())
@@ -183,7 +182,7 @@ namespace TranslationTool
             //Iterate through every sub folder
             foreach (DirectoryInfo dir in rootDir.GetDirectories())
             {
-                translationDirectory.Dirs.Add(getTranslationDir(dir.FullName));
+                translationDirectory.Dirs.Add(getTranslationDir(_context + _path , "\\" + dir.Name));
             }
 
             return translationDirectory;
