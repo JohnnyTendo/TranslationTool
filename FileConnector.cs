@@ -63,21 +63,19 @@ namespace TranslationTool
 
         private static TranslationProject compareProjects(TranslationProject _current, TranslationProject _import)
         {
-            TranslationProject output = new TranslationProject() 
-            { 
-                Language = _current.Language, 
-                LanguageCode = _current.LanguageCode, 
-                Mod = _current.Mod 
-            };
+            TranslationProject output = _current;;
             foreach (TranslationDirectory dir in _import.Dirs)
             {
-                TranslationDirectory currentDir = _current.Dirs.Find(d => d.Path == dir.Path);
+                string[] pathParts = dir.Path.Split('\\');
+
+                TranslationDirectory currentDir = _current.Dirs.Find(d => d.Path.EndsWith(pathParts[pathParts.Length - 1]));
                 if (currentDir == null)
                 {
                     output.Dirs.Add(dir);
                 }
                 else
                 {
+                    output.Dirs.RemoveAll(d => d.Path.EndsWith(pathParts[pathParts.Length - 1]));
                     output.Dirs.Add(compareDirectories(currentDir, dir));
                 }
             }
@@ -86,28 +84,32 @@ namespace TranslationTool
 
         private static TranslationDirectory compareDirectories(TranslationDirectory _current, TranslationDirectory _import)
         {
-            TranslationDirectory output = new TranslationDirectory() { Path = _current.Path };
+            TranslationDirectory output = _current;
             foreach (TranslationFile file in _import.Files)
             {
-                TranslationFile currentFile = _current.Files.Find(f => f.Path == file.Path);
+                string[] pathParts = file.Path.Split('\\');
+                TranslationFile currentFile = _current.Files.Find(f => f.Path.EndsWith(pathParts[pathParts.Length - 1]));
                 if (currentFile == null)
                 {
                     output.Files.Add(file);
                 }
                 else
                 {
+                    output.Files.RemoveAll(f => f.Path.EndsWith(pathParts[pathParts.Length - 1]));
                     output.Files.Add(compareFiles(currentFile, file));
                 }
             }
             foreach (TranslationDirectory dir in _import.Dirs)
             {
-                TranslationDirectory currentDir = _current.Dirs.Find(d => d.Path == dir.Path); 
+                string[] pathParts = dir.Path.Split('\\');
+                TranslationDirectory currentDir = _current.Dirs.Find(d => d.Path.EndsWith(pathParts[pathParts.Length - 1])); 
                 if (currentDir == null)
                 {
                     output.Dirs.Add(dir);
                 }
                 else
                 {
+                    output.Dirs.RemoveAll(d => d.Path.EndsWith(pathParts[pathParts.Length - 1]));
                     output.Dirs.Add(compareDirectories(currentDir, dir));
                 }
             }
